@@ -4,18 +4,25 @@ Docker based minetest auto server controlled over telnet written in go
 
 A client for this is [my telnetClient](https://github.com/ev2-1/telnetClient) library
 
-Volumes:
+### Volumes:
+
 - `/var/run/docker.sock` - mount docker socket here
 - `/mount/worlds` - a place where your worlds folder has to be mounted to create worlds/folders
 
-Configuration: (config.json)
+### Ports:
+
+- `8888` - telnet
+- `80` - http for minetest ready callback [requires this mod](https://github.com/ev2-1/minetest_instancer_callback)
+
+### Configuration: (config.json)
+
 - `SrvNetwork` - the network the containers will be added to
 - `MinetestContainer` - the container minetest servers will be created from (aka ./minetest git submodules)
 - `WorldPath` - the **ABSOLUTE** path on the **HOST MACHINE** where the worlds should be saved (**HAS** to be the same as whats mounted on `/mount/worlds`) 
 - `ConfigPath` - the **ABSOLUTE** path on the **HOST MACHINE** where minetest configuration files are mounted from
 - `GamePath` - the **ABSOLUTE** path on the **HOST MACHINE** where minetest Games will be loaded from
 
-Telnet c&c interface (port 8888):
+### Telnet c&c interface (port 8888):
 
 `get_ip`
 
@@ -95,3 +102,4 @@ Errors:
 > `err, <error>` - where error is a error message
 >
 > `err` - undefined error
+
