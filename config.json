@@ -1,0 +1,8 @@
+{
+	"SrvNetwork": "ev21_default",
+	"MinetestContainer": "minetest_5.4.1",
+	"WorldPath":  "/home/derz/Documents/ev2.1/worlds/",
+	"WorldMount": "/mount/worlds/",
+	"ConfigPath": "/home/derz/Documents/ev2.1/config/",
+	"GamePath":   "/home/derz/Documents/ev2.1/games/"
+}

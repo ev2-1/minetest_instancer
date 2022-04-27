@@ -1,6 +1,6 @@
 module github.com/ev2-1/minetest_instancer
 
-go 1.18
+go 1.17
 
 require github.com/docker/docker v20.10.14+incompatible
 

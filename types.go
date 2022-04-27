@@ -16,6 +16,8 @@ type minetestServer struct {
 	config string
 	id     string
 	net    string
+	ip     string
+	ready  bool
 }
 
 func NewController() (c *Controller, err error) {
