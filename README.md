@@ -51,7 +51,7 @@ Telnet c&c interface (port 8888):
 > - `OK, false` - container does not exist
 > - `OK, <status>, <Running>`
 > gets state of container,
-> state - either `created`, `running`, `restarting`, `exited`, `paused`, `dead` [detailed explenation][https://www.baeldung.com/ops/docker-container-states]
+> state - either `created`, `running`, `restarting`, `exited`, `paused`, `dead` [detailed explenation](https://www.baeldung.com/ops/docker-container-states)
 > Running - Either `Running` or `Stopped`
 
 `servers`
