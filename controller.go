@@ -3,9 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
-
-	"net/http"
 )
 
 var pwd string
@@ -36,37 +33,7 @@ func main() {
 	}
 
 	// web server
-	http.HandleFunc("/ready", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "OK!")
-
-		ipS := strings.Split(r.RemoteAddr, ":")
-		ip := strings.Join(ipS[:len(ipS)-1], ":")
-
-		fmt.Println("[HTTP] /ready by", ip)
-
-		// mark server as online:
-		srv := ip2ms[ip]
-		if srv != nil {
-			srv.ready = true
-		} else {
-			fmt.Println("[HTTP] info: no server with ip", ip, "registerd")
-		}
-
-		if waits[ip] != nil {
-			select {
-			case <-waits[ip]:
-			default:
-				close(waits[ip])
-			}
-		} else {
-			waits[ip] = make(chan struct{})
-			close(waits[ip])
-		}
-	})
-
-	go func() {
-		http.ListenAndServe("[::]:80", nil)
-	}()
+	go listen_http("[::]:80")
 
 	// start telnet server
 	err = telnetServer("8888")
@@ -96,6 +63,10 @@ func handle(prefix string, tw *TelnetWriter, s []string) string {
 
 		if len(s) == 4 {
 			s[4] = ""
+		}
+
+		if s[4] == "" || s[4] == "default" {
+			s[4] = config.SrvNetwork
 		}
 
 		// create world dir if not exist:
