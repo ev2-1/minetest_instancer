@@ -2,6 +2,8 @@
 
 Docker based minetest auto server controlled over telnet written in go
 
+Please build [this](https://github.com/ev2-1/minetest-5.4.1-docker) and tag this first (as `docker build --tag minetest-5.4.1`)
+
 A client for this is [my telnetClient](https://github.com/ev2-1/telnetClient) library
 
 ### Volumes:
