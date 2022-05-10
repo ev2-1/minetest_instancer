@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 var pwd string
@@ -35,6 +36,13 @@ func main() {
 	// web server
 	go listen_http("[::]:80")
 
+	go func() {
+		err := telnetBroadcaster("8889")
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
+
 	// start telnet server
 	err = telnetServer("8888")
 	if err != nil {
@@ -44,6 +52,14 @@ func main() {
 
 func handle(prefix string, tw *TelnetWriter, s []string) string {
 	switch s[0] {
+	case "send":
+		if len(s) < 2 {
+			return "err, usage: send <dest> <content>..."
+		}
+
+		broadcast(strings.Join(s[2:], " "), s[1])
+		return "OK"
+
 	case "get_ip":
 		if len(s) != 2 {
 			return "err, usage: get_ip <container>"
@@ -120,7 +136,7 @@ func handle(prefix string, tw *TelnetWriter, s []string) string {
 		}
 
 		if s[2] == "default" {
-			s[2] = srvNetwork
+			s[2] = config.SrvNetwork
 		}
 
 		if id2ms[s[1]] == nil {

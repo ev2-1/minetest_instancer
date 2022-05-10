@@ -47,15 +47,15 @@ func (c *Controller) ContainerStart(id string) error {
 func (c *Controller) MinetestCreate(mtSrv *minetestServer) (id string, err error) {
 	return c.ContainerCreate(minetestContainer, mtSrv.name, []mount.Mount{{
 		Type:   mount.TypeBind,
-		Source: worldPath + mtSrv.world,
+		Source: config.WorldPath + mtSrv.world,
 		Target: "/minetest/worlds/world",
 	}, {
 		Type:   mount.TypeBind,
-		Source: gamePath + mtSrv.game,
+		Source: config.GamePath + mtSrv.game,
 		Target: "/minetest/games/game",
 	}, {
 		Type:   mount.TypeBind,
-		Source: configPath + mtSrv.config,
+		Source: config.ConfigPath + mtSrv.config,
 		Target: "/config/config.yml",
 	}}, mtSrv.net)
 }
@@ -84,9 +84,9 @@ func (c *Controller) GetIp(id string) (string, error) {
 
 	nets := resp.NetworkSettings.Networks
 
-	if nets[srvNetwork] == nil { // id not in server network
+	if nets[config.SrvNetwork] == nil { // id not in server network
 		return "", nil
 	}
 
-	return nets[srvNetwork].IPAddress, nil
+	return nets[config.SrvNetwork].IPAddress, nil
 }

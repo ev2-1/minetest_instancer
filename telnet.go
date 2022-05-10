@@ -26,6 +26,49 @@ func (tw *TelnetWriter) Write(p []byte) (n int, err error) {
 
 var telnetCh = make(chan struct{})
 
+type dest struct {
+	conn     net.Conn
+	destType string
+}
+
+var boradcastDests []dest
+
+func telnetBroadcaster(port string) error {
+	ln, err := net.Listen("tcp", "[::]:"+port)
+	if err != nil {
+		return err
+	}
+	defer ln.Close()
+
+	log.Println("listen telnet", ln.Addr())
+
+	for {
+		select {
+		case <-telnetCh:
+			return nil
+		default:
+			conn, err := ln.Accept()
+			if err != nil {
+				log.Print(err)
+				continue
+			}
+
+			s, err := bufio.NewReader(conn).ReadString('\n')
+			i := int(math.Max(float64(len(s)-1), 1))
+			if len(s) == 0 {
+				return err
+			}
+
+			s = s[:i]
+
+			boradcastDests = append(boradcastDests, dest{
+				conn:     conn,
+				destType: s,
+			})
+		}
+	}
+}
+
 func telnetServer(port string) error {
 	ln, err := net.Listen("tcp", "[::]:"+port)
 	if err != nil {
@@ -47,6 +90,14 @@ func telnetServer(port string) error {
 			}
 
 			go handleTelnet(conn)
+		}
+	}
+}
+
+func broadcast(str, dst string) {
+	for _, dest := range boradcastDests {
+		if dest.destType == dst {
+			io.WriteString(dest.conn, str+"\r")
 		}
 	}
 }
