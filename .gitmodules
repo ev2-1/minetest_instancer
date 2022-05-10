@@ -1,3 +1,0 @@
-[submodule "minetest"]
-	path = minetest
-	url = https://github.com/ev2-1/minetest-5.4.1-docker
